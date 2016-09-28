@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+</head>
+<body>
+	<script>
+		// Preparation
+		let benchmark = [], benchmarking = [];
+		for (let i=0; i<13000; i++) benchmark.push(i);
+
+		//- For
+		console.group('for');
+		for (let runs = 0; runs < 5; runs++) {
+				console.time('For');
+					for (let i=0, total=benchmark.length; i<total; i++) {
+						benchmarking.push(benchmark[i]);
+					}
+				console.timeEnd('For');
+				benchmarking = [];
+		}
+		console.groupEnd();
+
+		//- Foreach
+		console.group('forEach');
+		for (let runs = 0; runs < 5; runs++) {
+				console.time('ForEach');
+					benchmark.forEach(value => {
+						benchmarking.push(value);
+					})
+				console.timeEnd('ForEach');
+				benchmarking = [];
+		}
+		console.groupEnd();
+
+		//- Map
+		console.group('map');
+		for (let runs = 0; runs < 5; runs++) {
+				console.time('Map');
+					benchmarking = benchmark.map(value => value)
+				console.timeEnd('Map');
+				benchmarking = [];
+		}
+		console.groupEnd();
+
+		//- Recursive
+		function recursive(current, total) {
+			benchmarking.push(benchmark[current]);
+
+			if (current<total) recursive(current+1, total);
+		}
+		console.group('recursive');
+		for (let runs = 0; runs < 5; runs++) {
+				console.time('Recursive');
+					recursive(0, benchmark.length);
+				console.timeEnd('Recursive');
+				benchmarking = [];
+		}
+		console.groupEnd();
+	</script>
+</body>
+</html>
